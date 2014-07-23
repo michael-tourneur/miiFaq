@@ -1,0 +1,32 @@
+<div class="uk-grid">
+		<input type="text" placeholder="Search..." class="uk-width-1-1 uk-form-large">
+</div>
+<div class="uk-grid">
+    <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
+		    <div class="uk-float-right">
+		    		<button class="uk-button uk-button-success" type="button">Ask a question</button>
+		    </div>
+		    <div class="uk-float-left">
+		    		Status: All	Open Answered Resolved Closed		
+		    </div>
+    </div>
+    <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
+		    <div class="uk-float-right">
+		    		<div class="uk-button-group">
+						    <a class="uk-button uk-button-mini" href="">View</a>
+						    <a class="uk-button uk-button-mini">Answer</a>
+						    <a class="uk-button uk-button-mini">Vote</a>
+						</div>
+		    </div>
+		    <div class="uk-float-left">
+		    		<select class="uk-form-large">
+		            <option>Select a category</option>
+		            <option value="1">Category 1</option>
+        		</select>
+		    </div>
+    </div>
+
+
+
+    <div class="uk-width-1-1 uk-panel uk-panel-box">blabla</div>
+</div>

@@ -1,0 +1,15 @@
+{
+    "name": "miiFaq",
+    "version": "0.0.1",
+    "type": "extension",
+    "title": "miiFaq",
+    "description": "",
+    "license": "",
+    "authors": [
+        {
+            "name": "Michael Tourneur",
+            "email": "michael.tourneur@gmail.com",
+            "homepage": ""
+        }
+    ]
+}
