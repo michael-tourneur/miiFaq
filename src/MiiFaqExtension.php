@@ -16,7 +16,7 @@ class MiiFaqExtension extends Extension
         parent::boot($app);
 
         // $app['events']->addSubscriber(new HelloListener());
-        // 
+ 
         $app->on('system.link', function(LinkEvent $event) {
             $event->register('Mii\Faq\Link\FaqLink');
         });
@@ -29,4 +29,17 @@ class MiiFaqExtension extends Extension
 
         }, 15);
     }
+
+    public function enable()
+    {
+       if ($version = $this['migrator']->create('extension://miiFaq/migrations', $this['option']->get('miiFaq:version'))->run()) {
+            $this['option']->set('miiFaq:version', $version);
+        }
+    }
+
+    public function uninstall()
+    {
+        $this['option']->remove('miiFaq:version');
+    }
+
 }
