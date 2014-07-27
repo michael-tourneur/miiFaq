@@ -5,14 +5,15 @@ namespace Mii\Faq\Entity;
 use Pagekit\Page\Entity\Page;
 use Pagekit\System\Entity\DataTrait;
 use Pagekit\User\Entity\AccessTrait;
+use Pagekit\Comment\CommentsTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
 
 /**
- * @Entity(tableClass="@faq_questions", eventPrefix="page.page")
+ * @Entity(tableClass="@faq_questions")
  */
 class Question
 {
-    use AccessTrait, DataTrait;
+    use AccessTrait, DataTrait, CommentsTrait;
 
     /* question closed status. */
     const STATUS_CLOSED = 0;
@@ -37,9 +38,9 @@ class Question
 
     /**
      * @HasMany(targetEntity="Answer", keyFrom="id", keyTo="question_id")
-     * @OrderBy({"created" = "DESC"})
+     * @OrderBy({"date" = "DESC"})
      */
-    protected $answers;
+    protected $comments;
 
     /**
      * @BelongsTo(targetEntity="Pagekit\User\Entity\User", keyFrom="user_id")
@@ -102,16 +103,6 @@ class Question
     public function setContent($content)
     {
         $this->content = $content;
-    }
-
-    public function getCommentCount()
-    {
-        return $this->comment_count;
-    }
-
-    public function setCommentCount($commentCount)
-    {
-        $this->comment_count = $commentCount;
     }
 
     public function getSlug()

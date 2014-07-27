@@ -1,1 +1,15 @@
-res
+<article class="uk-article">
+	<header>
+		<h1 class="uk-article-title">@($question.title)</h1>
+	</header>
+	<div class="uk-article-lead">
+		@($question.content)
+	</div>
+	<hr class="uk-article-divider">
+</article>
+
+@foreach($answers as $answer) 
+<div class="uk-panel">
+	@($answer.content)
+</div>
+@endforeach

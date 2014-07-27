@@ -76,11 +76,12 @@ class SiteController extends Controller
 
         $query = $this->answers->query()->where(['status = ?'], [Answer::STATUS_APPROVED]);
 
-        $this['db.em']->related($question, 'answers', $query);
+        $this['db.em']->related($question, 'comments', $query);
 
         return [
             'head.title' => __($question->getTitle()), 
-            'question' => $question
+            'question' => $question,
+            'answers' => $question->getComments(),
         ];
     }
 

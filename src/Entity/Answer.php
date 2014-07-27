@@ -9,7 +9,7 @@ use Pagekit\User\Entity\AccessTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
 
 /**
- * @Entity(tableClass="@faq_questions", eventPrefix="page.page")
+ * @Entity(tableClass="@faq_answers")
  */
 class Answer
 {
@@ -52,7 +52,7 @@ class Answer
     /** @Column(type="integer") */
     protected $vote_plus;
 
-    /** @Column(type="tinyint") */
+    /** @Column(type="integer") */
     protected $vote_best = 1;
 
     /** @Column(type="integer") */
