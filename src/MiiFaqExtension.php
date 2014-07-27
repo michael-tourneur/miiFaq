@@ -25,7 +25,7 @@ class MiiFaqExtension extends Extension
 
             $this->config += $app['option']->get("{$this->name}:config", []);
 
-            $app['config']->set('app.frontpage', $app['config']->get('app.frontpage') ?: '@faq/site');
+            $app['config']->set('app.frontpage', $app['config']->get('app.frontpage') ?: '@miiFaq/site');
 
         }, 15);
     }

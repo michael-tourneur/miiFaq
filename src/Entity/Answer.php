@@ -3,6 +3,7 @@
 namespace Mii\Faq\Entity;
 
 use Pagekit\Page\Entity\Page;
+use Mii\Faq\Entity\Question;
 use Pagekit\System\Entity\DataTrait;
 use Pagekit\User\Entity\AccessTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
@@ -10,59 +11,58 @@ use Pagekit\Framework\Database\Event\EntityEvent;
 /**
  * @Entity(tableClass="@faq_questions", eventPrefix="page.page")
  */
-class Question
+class Answer
 {
     use AccessTrait, DataTrait;
 
-    /* question closed status. */
-    const STATUS_CLOSED = 0;
+    /* answer blocked status. */
+    const STATUS_BLOCKED = 0;
 
-    /* question open status. */
-    const STATUS_OPEN = 1;
+    /* answer validated status. */
+    const STATUS_APPROVED = 1;
 
-    /* question answered status. */
-    const STATUS_ANSWERED = 2;
-
-    /* question resolved status. */
-    const STATUS_RESOLVED = 3;
+    /* answer pending status. */
+    const STATUS_PENDING = 2;
 
     /** @Column(type="integer") @Id */
     protected $id;
 
     /** @Column(type="integer") */
-    protected $user_id;
-
-    /** @Column(type="string") */
-    protected $slug;
+    protected $question_id;
 
     /**
-     * @HasMany(targetEntity="Answer", keyFrom="id", keyTo="question_id")
-     * @OrderBy({"created" = "DESC"})
+     * @BelongsTo(targetEntity="Mii\Faq\Entity\Question", keyFrom="question_id")
      */
-    protected $answers;
+    protected $question;
+
+    /** @Column(type="integer") */
+    protected $user_id;
 
     /**
      * @BelongsTo(targetEntity="Pagekit\User\Entity\User", keyFrom="user_id")
      */
     protected $user;
 
-    /** @Column(type="string") */
-    protected $title;
-
     /** @Column(type="integer") */
-    protected $status = self::STATUS_OPEN;
+    protected $status = self::STATUS_APPROVED;
 
     /** @Column */
     protected $content = '';
 
-    /** @Column(type="datetime")*/
+    /** @Column(type="integer") */
+    protected $vote_plus;
+
+    /** @Column(type="tinyint") */
+    protected $vote_best = 1;
+
+    /** @Column(type="integer") */
+    protected $vote_moins;
+
+    /** @Column(type="datetime") */
     protected $date;
 
     /** @Column(type="datetime") */
     protected $modified;
-
-    /** @Column(type="integer") */
-    protected $comment_count = 0;
 
     public function getId()
     {
@@ -84,14 +84,14 @@ class Question
         $this->user_id = $userId;
     }
 
-    public function getTitle()
+    public function getQuestionId()
     {
-        return $this->title;
+        return $this->question_id;
     }
 
-    public function setTitle($title)
+    public function setQuestionId($questionId)
     {
-        $this->title = $title;
+        $this->question_id = $questionId;
     }
 
     public function getContent()
@@ -104,24 +104,24 @@ class Question
         $this->content = $content;
     }
 
-    public function getCommentCount()
+    public function getVotePlus()
     {
-        return $this->comment_count;
+        return $this->vote_plus;
     }
 
-    public function setCommentCount($commentCount)
+    public function setVotePlus()
     {
-        $this->comment_count = $commentCount;
+        $this->vote_plus += 1;
     }
 
-    public function getSlug()
+    public function getVoteMoins()
     {
-        return $this->slug;
+        return $this->vote_moins;
     }
 
-    public function setSlug($slug)
+    public function setVoteMoins()
     {
-        $this->slug = $slug;
+        $this->vote_moins -= 1;
     }
 
     public function getModified()
@@ -154,10 +154,9 @@ class Question
     public static function getStatuses()
     {   
         return [
-            self::STATUS_OPEN           => __('Open'),
-            self::STATUS_ANSWERED       => __('Answered'),
-            self::STATUS_RESOLVED       => __('Resolved'),
-            self::STATUS_CLOSED         => __('Closed')
+            self::STATUS_BLOCKED        => __('Blocked'),
+            self::STATUS_PENDING        => __('Pending'),
+            self::STATUS_APPROVED     => __('Validated')
         ];
     }
 
@@ -171,20 +170,13 @@ class Question
         $this->user = $user;
     }
 
-    /**
-     * @PreSave
-     */
-    public function preSave(EntityEvent $event)
+    public function getQuestion()
     {
-        $this->modified = new \DateTime;
+        return $this->question;
+    }
 
-        $repository = $event->getEntityManager()->getRepository(get_class($this));
-
-        $i = 2;
-        $id = $this->id;
-
-        while ($repository->query()->where('slug = ?', [$this->slug])->where(function($query) use($id) { if ($id) $query->where('id <> ?', [$id]); })->first()) {
-            $this->slug = preg_replace('/-\d+$/', '', $this->slug).'-'.$i++;
-        }
+    public function setQuestion($question)
+    {
+        $this->question = $question;
     }
 }

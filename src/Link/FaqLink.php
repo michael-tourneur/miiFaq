@@ -27,7 +27,7 @@ class FaqLink extends Link
      */
     public function accept($route)
     {
-        return $route == '@faq/site' || $route == '@faq/id';
+        return $route == '@miiFaq/site' || $route == '@miiFaq/id';
     }
 
     /**

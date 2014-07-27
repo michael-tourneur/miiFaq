@@ -2,7 +2,7 @@
     <div class="uk-form-controls uk-form-controls-text">
         <p class="uk-form-controls-condensed">
             <label>
-                <input class="js-questions" type="radio" name="miifaq-radio" value="@@faq"@( $link == '@faq' ? ' checked' : '' )> @trans('Questions View')
+                <input class="js-questions" type="radio" name="miifaq-radio" value="@@miiFaq"@( $link == '@miiFaq' ? ' checked' : '' )> @trans('Questions View')
             </label>
         </p>
     </div>
@@ -12,12 +12,12 @@
     <div class="uk-form-controls uk-form-controls-text">
         <p class="uk-form-controls-condensed">
             <label>
-                <input type="radio" name="miifaq-radio" value=""@( $link != '@faq' ? ' checked' : '' )> @trans('Question')
+                <input type="radio" name="miifaq-radio" value=""@( $link != '@miiFaq' ? ' checked' : '' )> @trans('Question')
             </label>
             <select class="js-question" name="">
                 <option value=""@( !in_array($params.id, array_keys($questions)) ? ' selected' : '' )>@trans('- Select Question -')</option>
                 @foreach ($questions as $question)
-                <option value="@@faq/id?id=@( $question.id )"@( $params.id == $question.id ? ' selected' : '' )>@( $question.title )</option>
+                <option value="@@miiFaq/id?id=@( $question.id )"@( $params.id == $question.id ? ' selected' : '' )>@( $question.title )</option>
                 @endforeach
             </select>
         </p>

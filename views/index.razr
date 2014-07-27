@@ -1,41 +1,58 @@
-@script('miiFaq.questions-index', 'theme://miiFaq/assets/js/questions/index.js', ['requirejs'])
+@script('miiFaq.questions-index', 'extension://miiFaq/assets/js/questions/index.js', ['requirejs'])
 
-<div class="uk-grid">
-		<input type="text" placeholder="Search..." class="uk-width-1-1 uk-form-large">
-</div>
-<div class="uk-grid">
-    <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
-		    <div class="uk-float-right">
-		    		<button class="uk-button uk-button-success" type="button">Ask a question</button>
-		    </div>
-		    <div class="uk-float-left">
-		    		Status: All	Open Answered Resolved Closed		
-		    </div>
-    </div>
+<section id="miiFaq-index" class="uk-container">
+	<form class="uk-form uk-form-stacked">
+		<div class="uk-grid">
+			<input type="text" placeholder="Search..." class="uk-width-1-1 uk-form-large">
+		</div>
+		<div class="uk-grid">
+		  <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
+				    <div class="uk-float-right">
+				    		<a href="@url( '@miiFaq/question/add' )" class="uk-button uk-button-success" type="button">Ask a question</a>
+				    </div>
+				    <div class="uk-float-left">
+				    		Status: All	Open Answered Resolved Closed		
+				    </div>
+		  </div>
 
-    <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
-		    <div class="uk-float-right">
-		    		<div class="uk-button-group">
-						    <a class="uk-button uk-button-mini" href="">View</a>
-						    <a class="uk-button uk-button-mini">Answer</a>
-						    <a class="uk-button uk-button-mini">Vote</a>
-						</div>
-		    </div>
-		    <div class="uk-float-left">
-		    		<select class="uk-form-large">
-		            <option>Select a category</option>
-		            <option value="1">Category 1</option>
-        		</select>
-		    </div>
-    </div>
-	   
-	   @if(count($questions))
-	    	@foreach ($questions as $question)
-   		 			<div class="uk-width-1-1 uk-panel uk-panel-box">blabla</div>
-     		@endforeach
-	   @else
-			   <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix uk-text-bold">
-			   		Be the first to ask a question
-			   </div>
-	   @endif
-</div>
+		  <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
+			    <div class="uk-float-right">
+			    		<div class="uk-button-group">
+							    <a class="uk-button uk-button-mini" href="">View</a>
+							    <a class="uk-button uk-button-mini">Answer</a>
+							    <a class="uk-button uk-button-mini">Vote</a>
+							</div>
+			    </div>
+			    <div class="uk-float-left">
+			    		<select class="uk-form-small">
+			            <option>Select a category</option>
+			            <option value="1">Category 1</option>
+		      		</select>
+			    </div>
+		  </div>
+	  </div>
+	</form>
+	<br>
+	<div class="uk-grid">
+	@if(count($questions))
+
+		@foreach ($questions as $question)
+		 	<div class="uk-width-1-1 uk-panel uk-panel-box">
+		 		<div class="uk-clearfix">
+			 		<div class="uk-align-left"><a href="@url('@miiFaq/question/show', ['id' => $question.id])">@( $question.title )</a> </div>
+			 		<div class="uk-align-right">Answers @( $question.comment_count )</div>
+			 		<div class="uk-align-right">Views @( $question.comment_count )</div>
+			 		<div class="uk-align-right">Vote @( $question.comment_count )</div>
+			 	</div>
+		 		<div class="uk-clearfix">
+					user name | date | Category
+		 		</div>
+		 	</div>
+			@endforeach
+	@else
+	   <div class="uk-width-1-1 uk-panel uk-panel-box uk-text-bold">
+	   		Be the first to ask a question
+	   </div>
+	@endif
+	</div>
+</section>

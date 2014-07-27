@@ -17,34 +17,40 @@ return [
                 $table->addColumn('date', 'datetime', ['notnull' => false]);
                 $table->addColumn('modified', 'datetime');
                 $table->addColumn('comment_count', 'integer', ['default' => 0]);
+                $table->addColumn('view_count', 'integer', ['default' => 0]);
+                $table->addColumn('vote', 'integer', ['default' => 0]);
+                $table->addColumn('roles', 'simple_array', ['notnull' => false]);
                 $table->setPrimaryKey(['id']);
                 $table->addUniqueIndex(['slug'], 'POSTS_SLUG');
                 $table->addIndex(['title'], 'TITLE');
                 $table->addIndex(['user_id'], 'USER_ID');
+                $table->addIndex(['comment_count'], 'COMMENT_COUNT');
+                $table->addIndex(['view_count'], 'VIEW_COUNT');
+                $table->addIndex(['vote'], 'VOTE');
             });
         }
 
-        // if ($util->tableExists('@blog_comment') === false) {
-        //     $util->createTable('@blog_comment', function($table) {
-        //         $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
-        //         $table->addColumn('parent_id', 'integer', ['unsigned' => true, 'length' => 10]);
-        //         $table->addColumn('post_id', 'integer', ['unsigned' => true, 'length' => 10]);
-        //         $table->addColumn('user_id', 'string', ['length' => 255]);
-        //         $table->addColumn('author', 'string', ['length' => 255]);
-        //         $table->addColumn('email', 'string', ['length' => 255]);
-        //         $table->addColumn('url', 'string', ['length' => 255, 'notnull' => false]);
-        //         $table->addColumn('ip', 'string', ['length' => 255]);
-        //         $table->addColumn('created', 'datetime');
-        //         $table->addColumn('content', 'text');
-        //         $table->addColumn('status', 'smallint');
-        //         $table->setPrimaryKey(['id']);
-        //         $table->addIndex(['author'], 'AUTHOR');
-        //         $table->addIndex(['created'], 'CREATED');
-        //         $table->addIndex(['status'], 'STATUS');
-        //         $table->addIndex(['post_id'], 'POST_ID');
-        //         $table->addIndex(['post_id', 'status'], 'POST_ID_STATUS');
-        //     });
-        // }
+        if ($util->tableExists('@faq_answers') === false) {
+            $util->createTable('@faq_answers', function($table) {
+                $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
+                $table->addColumn('parent_id', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
+                $table->addColumn('question_id', 'integer', ['unsigned' => true, 'length' => 10]);
+                $table->addColumn('user_id', 'string', ['length' => 255, 'default' => 0]);
+                $table->addColumn('vote_plus', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
+                $table->addColumn('vote_best', 'smallint', ['default' => 0]);
+                $table->addColumn('vote_minus', 'string', ['unsigned' => true, 'length' => 10, 'default' => 0]);
+                $table->addColumn('date', 'datetime', ['notnull' => false]);
+                $table->addColumn('modified', 'datetime');
+                $table->addColumn('content', 'text');
+                $table->addColumn('status', 'smallint');
+                $table->setPrimaryKey(['id']);
+                $table->addIndex(['status'], 'STATUS');
+                $table->addIndex(['question_id'], 'QUESTION_ID');
+                $table->addIndex(['vote_plus'], 'VOTE_PLUS');
+                $table->addIndex(['vote_best'], 'VOTE_BEST');
+                $table->addIndex(['vote_minus'], 'VOTE_MINUS');
+            });
+        }
     }
 
 ];

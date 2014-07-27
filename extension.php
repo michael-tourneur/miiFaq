@@ -31,22 +31,22 @@ return [
         'faq' => [
             'label'  => 'Faq',
             'icon'   => 'extension://blog/extension.svg',
-            'url'    => '@faq/question',
-            'active' => '@faq/question*',
+            'url'    => '@miiFaq/question',
+            'active' => '@miiFaq/question*',
             'access' => 'faq: manage questions || faq: manage answers'
         ],
         'faq: question list' => [
             'label'  => 'Faq',
             'parent' => 'faq',
-            'url'    => '@faq/question',
-            'active' => '@faq/question*',
+            'url'    => '@miiFaq/question',
+            'active' => '@miiFaq/question*',
             'access' => 'faq: manage questions'
         ],
         'faq: answer list' => [
             'label'  => 'Answers',
             'parent' => 'faq',
-            'url'    => '@faq/answer',
-            'active' => '@faq/answer*',
+            'url'    => '@miiFaq/answer',
+            'active' => '@miiFaq/answer*',
             'access' => 'faq: manage answers'
         ],
 
@@ -57,10 +57,10 @@ return [
         'faq: manage settings' => [
             'title' => 'Manage settings'
         ],
-        'blog: manage content' => [
+        'faq: manage questions' => [
             'title' => 'Manage questions'
         ],
-        'blog: manage answers' => [
+        'faq: manage answers' => [
             'title' => 'Manage answers'
         ]
 
