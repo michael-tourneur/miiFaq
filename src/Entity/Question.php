@@ -65,6 +65,12 @@ class Question
     /** @Column(type="integer") */
     protected $comment_count = 0;
 
+    /** @Column(type="integer") */
+    protected $view_count = 0;
+
+    /** @Column(type="integer") */
+    protected $vote = 0;
+
     public function getId()
     {
         return $this->id;
@@ -160,6 +166,26 @@ class Question
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    public function getViewCount()
+    {
+        return $this->view_count;
+    }
+
+    public function setViewCount($viewCount)
+    {
+        $this->view_count = $viewCount;
+    }
+
+    public function getVote()
+    {
+        return $this->vote;
+    }
+
+    public function getCommentCount()
+    {
+        return $this->comment_count;
     }
 
     /**

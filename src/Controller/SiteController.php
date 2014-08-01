@@ -2,6 +2,7 @@
 
 namespace Mii\Faq\Controller;
 
+use Mii\Faq\MiiFaqExtension;
 use Mii\Faq\Entity\Question;
 use Mii\Faq\Entity\Answer;
 use Pagekit\Framework\Controller\Controller;
@@ -15,6 +16,10 @@ use Pagekit\User\Entity\UserRepository;
  */
 class SiteController extends Controller
 {
+    /**
+     * @var MiiFaqExtension
+     */
+    protected $extension;
 
     /**
      * @var Repository
@@ -29,22 +34,57 @@ class SiteController extends Controller
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(MiiFaqExtension $extension)
     {
-        $this->questions     = $this['db.em']->getRepository('Mii\Faq\Entity\Question');
-        $this->answers  = $this['db.em']->getRepository('Mii\Faq\Entity\Answer');
+        $this->questions    = $extension;
+        $this->questions    = $this['db.em']->getRepository('Mii\Faq\Entity\Question');
+        $this->answers      = $this['db.em']->getRepository('Mii\Faq\Entity\Answer');
     }
 
 	/**
+     * @Request({"filter": "array", "page":"int"})
      * @Response("extension://miiFaq/views/index.razr")
      */
-    public function indexAction()
-    {	
-    		$questions = $this->questions->query()->where(['status = ?', 'date < ?'], [Question::STATUS_OPEN, new \DateTime])->orderBy('date', 'DESC')->get();
+    public function indexAction($filter = null, $page = 0)
+    {	  
+    	$query = $this->questions->query()->where(['date' => new \DateTime]);
+
+        if ($filter) {
+            $this['session']->set('miiFaq.index.filter', $filter);
+        } else {
+            $filter = $this['session']->get('miiFaq.index.filter', []);
+        }
+
+        $query = $this->questions->query();
+
+        if (isset($filter['status']) && is_numeric($filter['status'])) {
+            $query->where(['status' => intval($filter['status'])]);
+        }
+
+        if (isset($filter['search']) && strlen($filter['search'])) {
+            $query->where(function($query) use ($filter) {
+                $query->orWhere(['title LIKE :search', 'slug LIKE :search'], ['search' => "%{$filter['search']}%"]);
+            });
+        }
+
+        if (isset($filter['orderby']) && in_array($filter['orderby'], ['vote', 'answer_count', 'view_count'])) {
+            $query->orderBy($filter['orderby'], 'ASC');
+        }
+
+        $limit = 10; //$this->extension->getConfig('miiFaq.question_per_page', 10);
+        $count = $query->count();
+        $total = ceil($count / $limit);
+        $page  = max(0, min($total - 1, $page));
+        $questions = $query->offset($page * $limit)->limit($limit)->get();
+
+
+        $queryUrl = [];
 
         return [
             'head.title' => __('FAQ'),
             'questions' => $questions,
+            'questionEntity' => new Question,
+            'filter' => $filter,
         ];
     }
 
@@ -72,6 +112,14 @@ class SiteController extends Controller
     {
         if (!$question = $this->questions->where(['id = ?', 'date < ?'], [$id, new \DateTime])->first()) {
             return $this['response']->create(__('Post not found!'), 404);
+        }
+
+        $viewed = $this['session']->get('miiFaq.questions.viewed', []);
+        if(!in_array($id, $viewed)) {
+            $question->setViewCount( $question->getViewCount() + 1 );
+            $this->questions->save($question);
+            $viewed[] = $id;
+            $this['session']->set('miiFaq.questions.viewed', $viewed);
         }
 
         $query = $this->answers->query()->where(['status = ?'], [Answer::STATUS_APPROVED]);

@@ -1,0 +1,10 @@
+[{
+     'id': 'video',
+     'name': 'Video'
+},{
+     'id': 'image',
+     'name': 'Image'
+},{
+     'id': 'music',
+     'name': 'Music'
+}]

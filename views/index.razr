@@ -3,24 +3,63 @@
 <section id="miiFaq-index" class="uk-container">
 	<form class="uk-form uk-form-stacked">
 		<div class="uk-grid">
-			<input type="text" placeholder="Search..." class="uk-width-1-1 uk-form-large">
+			<input type="text" placeholder="@trans( 'Search...' )" class="uk-width-1-1 uk-form-large">
 		</div>
 		<div class="uk-grid">
 		  <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
 				    <div class="uk-float-right">
-				    		<a href="@url( '@miiFaq/question/add' )" class="uk-button uk-button-success" type="button">Ask a question</a>
+				    		<a href="@url( '@miiFaq/question/add' )" class="uk-button uk-button-success" type="button">@trans( 'Ask a question' )</a>
 				    </div>
 				    <div class="uk-float-left">
-				    		Status: All	Open Answered Resolved Closed		
+				    		@trans( 'Status:' ) 
+				    		<?php 
+				    				$query = ['filter' => $filter];
+				    				$current = !(array_key_exists('status', $filter));
+				    				if(!$current) unset($query['filter']['status']);				
+				    		?>
+							  <a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'All' )</a>
+				    		<?php 
+				    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_OPEN);
+				    				$query['filter']['status'] = $questionEntity::STATUS_OPEN;
+				    		?>
+				    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Open' )</a> 
+				    		<?php 
+				    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_ANSWERED);
+				    				$query['filter']['status'] = $questionEntity::STATUS_ANSWERED;
+				    		?>
+				    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Answered' )</a> 
+				    		<?php 
+				    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_RESOLVED);
+				    				$query['filter']['status'] = $questionEntity::STATUS_RESOLVED;
+				    		?>
+				    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Resolved' )</a>  
+				    		<?php 
+				    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_CLOSED);
+				    				$query['filter']['status'] = $questionEntity::STATUS_CLOSED;
+				    		?>
+				    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Closed' )</a> 		    				
 				    </div>
 		  </div>
 
 		  <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
 			    <div class="uk-float-right">
 			    		<div class="uk-button-group">
-							    <a class="uk-button uk-button-mini" href="">View</a>
-							    <a class="uk-button uk-button-mini">Answer</a>
-							    <a class="uk-button uk-button-mini">Vote</a>
+				    			<?php 
+				    				$query = ['filter' => $filter];
+				    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'view');
+				    				$query['filter']['orderby'] = 'view_count';
+				    			?>
+							    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'View' )</a>
+							    <?php 
+				    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'answer');
+				    				$query['filter']['orderby'] = 'comment_count';
+				    			?>
+							    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'Answer' )</a>
+							    <?php 
+				    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'vote');
+				    				$query['filter']['orderby'] = 'vote';
+				    			?>
+							    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'Vote' )</a>
 							</div>
 			    </div>
 			    <div class="uk-float-left">
@@ -40,18 +79,18 @@
 		 	<div class="uk-width-1-1 uk-panel uk-panel-box">
 		 		<div class="uk-clearfix">
 			 		<div class="uk-align-left"><a href="@url('@miiFaq/question/show', ['id' => $question.id])">@( $question.title )</a> </div>
-			 		<div class="uk-align-right">Answers @( $question.comment_count )</div>
-			 		<div class="uk-align-right">Views @( $question.comment_count )</div>
-			 		<div class="uk-align-right">Vote @( $question.comment_count )</div>
+			 		<div class="uk-align-right">Answers @( $question->getCommentCount() )</div>
+			 		<div class="uk-align-right">Views @( $question->getViewCount() )</div>
+			 		<div class="uk-align-right">Vote @( $question->getVote() )</div>
 			 	</div>
 		 		<div class="uk-clearfix">
-					user name | date | Category
+					user name | @date($question.date, 'Y-m-d') | Category
 		 		</div>
 		 	</div>
 			@endforeach
 	@else
 	   <div class="uk-width-1-1 uk-panel uk-panel-box uk-text-bold">
-	   		Be the first to ask a question
+	   		@trans( 'No data found' )
 	   </div>
 	@endif
 	</div>

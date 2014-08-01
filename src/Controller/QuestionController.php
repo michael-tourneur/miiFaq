@@ -36,8 +36,8 @@ class QuestionController extends Controller
     public function __construct()
     {
         $this->questions 	= $this['db.em']->getRepository('Mii\Faq\Entity\Question');
-        $this->roles = $this['users']->getRoleRepository();
-        $this->users 			= $this['users']->getUserRepository();
+        $this->roles        = $this['users']->getRoleRepository();
+        $this->users 		= $this['users']->getUserRepository();
     }
 
     /**
