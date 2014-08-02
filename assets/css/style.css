@@ -1,0 +1,7 @@
+#miiFaq-index .uk-autocomplete{
+	position: relative;
+}
+
+#miiFaq-index .uk-autocomplete .uk-dropdown{
+	width: 100%;
+}

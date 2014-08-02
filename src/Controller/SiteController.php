@@ -61,28 +61,37 @@ class SiteController extends Controller
             $query->where(['status' => intval($filter['status'])]);
         }
 
-        if (isset($filter['search']) && strlen($filter['search'])) {
-            $query->where(function($query) use ($filter) {
-                $query->orWhere(['title LIKE :search', 'slug LIKE :search'], ['search' => "%{$filter['search']}%"]);
-            });
-        }
-
         if (isset($filter['orderby']) && in_array($filter['orderby'], ['vote', 'answer_count', 'view_count'])) {
             $query->orderBy($filter['orderby'], 'ASC');
         }
 
+        if (isset($filter['search']) && strlen($filter['search'])) {
+            $query->where(function($query) use ($filter) {
+                $query->orWhere(['title LIKE ?'], ["%{$filter['search']}%"]);
+            });
+        }
+
         $limit = 10; //$this->extension->getConfig('miiFaq.question_per_page', 10);
         $count = $query->count();
+        
+        if ($this['request']->isXmlHttpRequest()) {
+            $list = [];
+            foreach ($query->get() as $key => $question) {
+                $list[] = ['title' => $question->getTitle(), 'id' => $question->getId(), 'url' => $this['url']->to('@miiFaq/question/show', ['id' => $question->getId()])];
+            }
+            return $this['response']->json([
+                'list' => $list,
+                'count' => $count
+            ]);
+        }
+
         $total = ceil($count / $limit);
         $page  = max(0, min($total - 1, $page));
-        $questions = $query->offset($page * $limit)->limit($limit)->get();
-
-
-        $queryUrl = [];
+        $query->offset($page * $limit)->limit($limit)->get();
 
         return [
             'head.title' => __('FAQ'),
-            'questions' => $questions,
+            'questions' => $query->get(),
             'questionEntity' => new Question,
             'filter' => $filter,
         ];
