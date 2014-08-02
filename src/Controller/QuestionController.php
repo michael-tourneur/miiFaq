@@ -9,7 +9,8 @@ use Pagekit\Framework\Controller\Exception;
 use Pagekit\User\Entity\UserRepository;
 
 /**
- * @Access("faq: manage content", admin=true)
+ * @Route("/admin/miifaq", name="@miiFaq/")
+ * @Access("miiFaq: manage content", admin=true)
  */
 class QuestionController extends Controller
 {

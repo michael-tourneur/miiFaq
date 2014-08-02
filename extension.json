@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "type": "extension",
     "title": "miiFaq",
-    "description": "",
-    "license": "",
+    "description": "Question & Answer extension like Stack Overflow, Quora or Yahoo Answers",
+    "license": "MIT",
     "authors": [
         {
             "name": "Michael Tourneur",

@@ -27,7 +27,7 @@ class FaqLink extends Link
      */
     public function accept($route)
     {
-        return $route == '@miiFaq/site' || $route == '@miiFaq/id';
+        return $route == '@miiFaq/site' || $route == '@miiFaq/site/question/id';
     }
 
     /**
@@ -35,7 +35,7 @@ class FaqLink extends Link
      */
     public function renderForm($link, $params = [], $context = '')
     {
-        $questions = [];
-        return $this['view']->render('extension://miiFaq/views/admin/link/faq.razr', compact('link', 'params', 'questions'));
+        $questions = $this['db.em']->getRepository('Mii\Faq\Entity\Question')->findAll();
+        return $this['view']->render('extension://miiFaq/views/admin/link/miiFaq.razr', compact('link', 'params', 'questions'));
     }
 }

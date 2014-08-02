@@ -12,7 +12,7 @@ use Pagekit\User\Entity\UserRepository;
 
 
 /**
- * @Route("/faq", name="@miiFaq")
+ * @Route("/faq")
  */
 class SiteController extends Controller
 {
@@ -42,6 +42,7 @@ class SiteController extends Controller
     }
 
 	/**
+     * @Route("/", name="@miiFaq/site")
      * @Request({"filter": "array", "page":"int"})
      * @Response("extension://miiFaq/views/index.razr")
      */
@@ -71,13 +72,13 @@ class SiteController extends Controller
             });
         }
 
-        $limit = 10; //$this->extension->getConfig('miiFaq.question_per_page', 10);
+        $limit = 20; //$this->extension->getConfig('index.question_per_page', 20);
         $count = $query->count();
         
         if ($this['request']->isXmlHttpRequest()) {
             $list = [];
             foreach ($query->get() as $key => $question) {
-                $list[] = ['title' => $question->getTitle(), 'id' => $question->getId(), 'url' => $this['url']->to('@miiFaq/question/show', ['id' => $question->getId()])];
+                $list[] = ['title' => $question->getTitle(), 'id' => $question->getId(), 'url' => $this['url']->to('@miiFaq/site/question/id', ['id' => $question->getId()])];
             }
             return $this['response']->json([
                 'list' => $list,
@@ -98,23 +99,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @Route("/question/add", name="@miiFaq/question/add")
-     * @Response("extension://miiFaq/views/question/edit.razr")
-     */
-    public function addQuestionAction()
-    {
-        $question = new Question;
-        $question->setUser($this['user']);
-
-        return [
-            'head.title' => __('Add Question'), 
-            'question' => $question, 
-            'statuses' => Question::getStatuses(), 
-        ];
-    }
-
-    /**
-     * @Route("/{id}", name="@miiFaq/question/show")
+     * @Route("/question/{id}", name="@miiFaq/site/question/id")
      * @Response("extension://miiFaq/views/question/view.razr")
      */
     public function showQuestionAction($id)
@@ -142,10 +127,24 @@ class SiteController extends Controller
         ];
     }
 
+    /**
+     * @Route("/question/add", name="@miiFaq/site/question/add")
+     * @Response("extension://miiFaq/views/question/edit.razr")
+     */
+    public function addQuestionAction()
+    {
+        $question = new Question;
+        $question->setUser($this['user']);
 
+        return [
+            'head.title' => __('Add Question'), 
+            'question' => $question, 
+            'statuses' => Question::getStatuses(), 
+        ];
+    }
 
     /**
-     * @Route("/question/save", name="@miiFaq/question/save")
+     * @Route("/question/save", name="@miiFaq/site/question/save")
      * @Request({"id": "int", "question": "array"})
      * @Response("json")
      */

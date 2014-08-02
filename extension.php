@@ -13,58 +13,66 @@ return [
     'resources' => [
 
         'export' => [
-            'view' => 'views'
+            'view' => 'views',
+            'asset' => 'assets'
         ]
 
     ],
 
     'controllers' => 'src/Controller/*Controller.php',
 
-    'settings' => [
+    // 'settings' => [
 
-        'system' => 'miiFaq/admin/settings.razr'
+    //     'system' => 'miiFaq/admin/settings.razr'
 
-    ],
+    // ],
 
     'menu' => [
 
-        'faq' => [
-            'label'  => 'Faq',
+        'miiFaq' => [
+            'label'  => 'miiFaq',
             'icon'   => 'extension://blog/extension.svg',
-            'url'    => '@miiFaq/question',
-            'active' => '@miiFaq/question*',
-            'access' => 'faq: manage questions || faq: manage answers'
+            'url'    => '@miiFaq/admin/question',
+            'active' => '@miiFaq/admin/question*',
+            'access' => 'miiFaq: manage questions || miiFaq: manage answers'
         ],
-        'faq: question list' => [
-            'label'  => 'Faq',
-            'parent' => 'faq',
-            'url'    => '@miiFaq/question',
-            'active' => '@miiFaq/question*',
-            'access' => 'faq: manage questions'
-        ],
-        'faq: answer list' => [
-            'label'  => 'Answers',
-            'parent' => 'faq',
-            'url'    => '@miiFaq/answer',
-            'active' => '@miiFaq/answer*',
-            'access' => 'faq: manage answers'
-        ],
+        // 'miiFaq: question list' => [
+        //     'label'  => 'Faq',
+        //     'parent' => 'miiFaq',
+        //     'url'    => '@miiFaq/admin/question',
+        //     'active' => '@miiFaq/admin/question*',
+        //     'access' => 'miiFaq: manage questions'
+        // ],
+        // 'miiFaq: answer list' => [
+        //     'label'  => 'Answers',
+        //     'parent' => 'miiFaq',
+        //     'url'    => '@miiFaq/admin/answer',
+        //     'active' => '@miiFaq/admin/answer*',
+        //     'access' => 'miiFaq: manage answers'
+        // ],
 
     ],
 
     'permissions' => [
 
-        'faq: manage settings' => [
+        'miiFaq: manage settings' => [
             'title' => 'Manage settings'
         ],
-        'faq: manage questions' => [
+        'miiFaq: manage questions' => [
             'title' => 'Manage questions'
         ],
-        'faq: manage answers' => [
+        'miiFaq: manage answers' => [
             'title' => 'Manage answers'
         ]
 
     ],
+
+
+    'defaults' => [
+
+        'index.questions_per_page'  => 20,
+
+    ]
 
 
 ];

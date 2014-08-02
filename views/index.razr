@@ -7,9 +7,13 @@
 		</form>
 		<br>
 		<form class="uk-form uk-form-stacked">
+				<div class="uk-visible-small">
+					<a href="@url( '@miiFaq/site/question/add' )" class="uk-button uk-button-success uk-width-1-1" type="button">@trans( 'Ask a question' )</a>
+					<br><br>
+				</div>
 			  <div class="uk-width-1-1 uk-panel uk-panel-box uk-clearfix">
-					    <div class="uk-float-right">
-					    		<a href="@url( '@miiFaq/question/add' )" class="uk-button uk-button-success" type="button">@trans( 'Ask a question' )</a>
+					    <div class="uk-float-right uk-hidden-small">
+					    		<a href="@url( '@miiFaq/site/question/add' )" class="uk-button uk-button-success" type="button">@trans( 'Ask a question' )</a>
 					    </div>
 					    <div class="uk-float-left">
 					    		@trans( 'Status:' ) 
@@ -18,27 +22,27 @@
 					    				$current = !(array_key_exists('status', $filter));
 					    				if(!$current) unset($query['filter']['status']);				
 					    		?>
-								  <a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'All' )</a>
+								  <a class="@( $current ? 'active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'All' )</a>
 					    		<?php 
 					    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_OPEN);
 					    				$query['filter']['status'] = $questionEntity::STATUS_OPEN;
 					    		?>
-					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Open' )</a> 
+					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Open' )</a> 
 					    		<?php 
 					    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_ANSWERED);
 					    				$query['filter']['status'] = $questionEntity::STATUS_ANSWERED;
 					    		?>
-					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Answered' )</a> 
+					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Answered' )</a> 
 					    		<?php 
 					    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_RESOLVED);
 					    				$query['filter']['status'] = $questionEntity::STATUS_RESOLVED;
 					    		?>
-					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Resolved' )</a>  
+					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Resolved' )</a>  
 					    		<?php 
 					    				$current = (array_key_exists('status', $filter) && $filter['status'] == $questionEntity::STATUS_CLOSED);
 					    				$query['filter']['status'] = $questionEntity::STATUS_CLOSED;
 					    		?>
-					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq', $query )">@trans( 'Closed' )</a> 		    				
+					    		<a class="@( $current ? 'active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Closed' )</a> 		    				
 					    </div>
 			  </div>
 
@@ -47,20 +51,20 @@
 				    		<div class="uk-button-group">
 					    			<?php 
 					    				$query = ['filter' => $filter];
-					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'view');
+					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'view_count');
 					    				$query['filter']['orderby'] = 'view_count';
 					    			?>
-								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'View' )</a>
+								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'View' )</a>
 								    <?php 
-					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'answer');
+					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'comment_count');
 					    				$query['filter']['orderby'] = 'comment_count';
 					    			?>
-								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'Answer' )</a>
+								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Answer' )</a>
 								    <?php 
 					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'vote');
 					    				$query['filter']['orderby'] = 'vote';
 					    			?>
-								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq', $query )">@trans( 'Vote' )</a>
+								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Vote' )</a>
 								</div>
 				    </div>
 				    <div class="uk-float-left">
