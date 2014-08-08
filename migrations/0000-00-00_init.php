@@ -33,7 +33,6 @@ return [
         if ($util->tableExists('@faq_answers') === false) {
             $util->createTable('@faq_answers', function($table) {
                 $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
-                $table->addColumn('parent_id', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
                 $table->addColumn('question_id', 'integer', ['unsigned' => true, 'length' => 10]);
                 $table->addColumn('user_id', 'string', ['length' => 255, 'default' => 0]);
                 $table->addColumn('vote_plus', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);

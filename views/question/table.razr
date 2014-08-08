@@ -3,7 +3,7 @@
 	@foreach ($questions as $question)
 	 	<div class="uk-width-1-1 uk-panel uk-panel-box">
 	 		<div class="uk-clearfix">
-		 		<div class="uk-align-left"><a href="@url('@miiFaq/question/show', ['id' => $question.id])">@( $question.title )</a> </div>
+		 		<div class="uk-align-left"><a href="@url('@miiFaq/site/question/id', ['id' => $question.id])">@( $question.title )</a> </div>
 		 		<div class="uk-align-right">Answers @( $question->getCommentCount() )</div>
 		 		<div class="uk-align-right">Views @( $question->getViewCount() )</div>
 		 		<div class="uk-align-right">Vote @( $question->getVote() )</div>

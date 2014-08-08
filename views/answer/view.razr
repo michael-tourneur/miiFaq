@@ -1,0 +1,10 @@
+<div class="uk-panel uk-panel-box">
+	<div>
+			@($answer.content)
+	</div>
+	<div>
+			<div class="uk-float-right uk-text-small">
+		  		@trans( 'Answered' ) @date($answer.date)
+		  </div>
+  </div>
+</div>

@@ -99,6 +99,36 @@ class SiteController extends Controller
     }
 
     /**
+     * @Route("/question/add", name="@miiFaq/site/question/add")
+     * @Response("extension://miiFaq/views/question/edit.razr")
+     */
+    public function addQuestionAction()
+    {
+        $question = new Question;
+        $question->setUser($this['user']);
+        return [
+            'head.title' => __('Add Question'), 
+            'question' => $question, 
+            'statuses' => Question::getStatuses(), 
+        ];
+    }
+
+    /**
+     * @Route("/question/save", name="@miiFaq/site/question/save")
+     * @Request({"id": "int", "question": "array"})
+     * @Response("json")
+     */
+    public function saveQuestionAction($id = null, $data)
+    {
+        $questionController = new QuestionController();
+        $response = $questionController->saveAction($id, $data);
+        if($this['request']->isXmlHttpRequest())
+            return $response;
+
+        return $this->redirect($this['url']->route('@miiFaq/site/question/id', ['id' => $response['id']]));
+    }
+
+    /**
      * @Route("/question/{id}", name="@miiFaq/site/question/id")
      * @Response("extension://miiFaq/views/question/view.razr")
      */
@@ -128,30 +158,18 @@ class SiteController extends Controller
     }
 
     /**
-     * @Route("/question/add", name="@miiFaq/site/question/add")
-     * @Response("extension://miiFaq/views/question/edit.razr")
-     */
-    public function addQuestionAction()
-    {
-        $question = new Question;
-        $question->setUser($this['user']);
-
-        return [
-            'head.title' => __('Add Question'), 
-            'question' => $question, 
-            'statuses' => Question::getStatuses(), 
-        ];
-    }
-
-    /**
-     * @Route("/question/save", name="@miiFaq/site/question/save")
-     * @Request({"id": "int", "question": "array"})
+     * @Route("/answer/save", name="@miiFaq/site/answer/save")
+     * @Request({"id": "int", "answer": "array"})
      * @Response("json")
      */
-    public function saveAction($id = null, $data)
+    public function saveAnswerAction($id = null, $data)
     {
-        $questionController = new QuestionController();
-        return $questionController->saveAction($id, $data);
+        $answerController = new AnswerController();
+        $response = $answerController->saveAction($id, $data);
+        if($this['request']->isXmlHttpRequest())
+            return $response;
+
+        return $this->redirect($this['url']->route('@miiFaq/site/question/id', ['id' => $data['question_id']]));
     }
 
 }

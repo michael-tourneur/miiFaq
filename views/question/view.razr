@@ -8,8 +8,6 @@
 	<hr class="uk-article-divider">
 </article>
 
-@foreach($answers as $answer) 
-<div class="uk-panel">
-	@($answer.content)
-</div>
-@endforeach
+@include('extension://miiFaq/views/answer/table.razr', compact($answers))
+
+@include('extension://miiFaq/views/answer/edit.razr')

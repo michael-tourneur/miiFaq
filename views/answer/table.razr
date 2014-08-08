@@ -1,0 +1,5 @@
+<h3>@(count($answers)) @trans('Answers')</h3>
+
+@foreach($answers as $answer) 
+	@include('extension://miiFaq/views/answer/view.razr', compact($answer))
+@endforeach

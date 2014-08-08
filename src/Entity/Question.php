@@ -188,6 +188,11 @@ class Question
         return $this->comment_count;
     }
 
+    public function commentCountPlus()
+    {
+        return $this->comment_count += 1;
+    }
+
     /**
      * @PreSave
      */

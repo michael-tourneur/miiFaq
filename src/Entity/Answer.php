@@ -13,7 +13,7 @@ use Pagekit\Framework\Database\Event\EntityEvent;
  */
 class Answer
 {
-    use AccessTrait, DataTrait;
+    use DataTrait;
 
     /* answer blocked status. */
     const STATUS_BLOCKED = 0;
@@ -50,13 +50,13 @@ class Answer
     protected $content = '';
 
     /** @Column(type="integer") */
-    protected $vote_plus;
+    protected $vote_plus = 0;
 
     /** @Column(type="integer") */
     protected $vote_best = 1;
 
     /** @Column(type="integer") */
-    protected $vote_moins;
+    protected $vote_minus = 0;
 
     /** @Column(type="datetime") */
     protected $date;
@@ -114,12 +114,12 @@ class Answer
         $this->vote_plus += 1;
     }
 
-    public function getVoteMoins()
+    public function getVoteMinus()
     {
         return $this->vote_moins;
     }
 
-    public function setVoteMoins()
+    public function setVoteMinus()
     {
         $this->vote_moins -= 1;
     }

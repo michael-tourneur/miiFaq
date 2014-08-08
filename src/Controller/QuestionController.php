@@ -80,7 +80,9 @@ class QuestionController extends Controller
             }
 
             $date = (isset($data['date'])) ? $data['date'] : time();
-            $data['date'] = $this['dates']->getDateTime($date)->setTimezone(new \DateTimeZone('UTC'));
+            $data['modified'] = $this['dates']->getDateTime($date)->setTimezone(new \DateTimeZone('UTC'));
+
+            $data['date'] = $id ? $question->getDate() : $data['modified'];
 
             $this->questions->save($question, $data);
 
