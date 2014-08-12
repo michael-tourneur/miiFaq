@@ -8,6 +8,6 @@
 	<hr class="uk-article-divider">
 </article>
 
-@include('extension://miiFaq/views/answer/table.razr', compact($answers))
+@include('extension://miiFaq/views/answer/table.razr', ['answers' => $answers, 'filter' => $filter])
 
 @include('extension://miiFaq/views/answer/edit.razr')

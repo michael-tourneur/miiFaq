@@ -1,10 +1,19 @@
 <div class="uk-panel uk-panel-box">
+	@if($answer.vote_best)
+	<i class="uk-icon-check"></i></a>
+	@endif
+
+	<div class="uk-clearfix">
+			<div class="uk-float-left uk-text-large">
+		  		<a href=""><i class="uk-icon-chevron-up"></i></a> @($answer.vote) <a href=""><i class="uk-icon-chevron-down"></i></a>
+		  </div>
+			<div class="uk-float-right uk-text-small">
+		  		@trans( 'Answered' ) @date($answer.getDate())
+		  </div>
+  </div>
+
+  <hr class="uk-article-divider">
 	<div>
 			@($answer.content)
 	</div>
-	<div>
-			<div class="uk-float-right uk-text-small">
-		  		@trans( 'Answered' ) @date($answer.date)
-		  </div>
-  </div>
 </div>

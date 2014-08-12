@@ -42,7 +42,7 @@ class AnswerController extends Controller
      */
     public function __construct()
     {
-        $this->questions      = $this['db.em']->getRepository('Mii\Faq\Entity\Question');
+        $this->questions    = $this['db.em']->getRepository('Mii\Faq\Entity\Question');
         $this->answers 	    = $this['db.em']->getRepository('Mii\Faq\Entity\Answer');
         $this->roles        = $this['users']->getRoleRepository();
         $this->users 		= $this['users']->getUserRepository();
@@ -54,6 +54,7 @@ class AnswerController extends Controller
      */
     public function saveAction($id, $data)
     {
+        if(!$data['content']) return ['message' => __('answer message is required.'), 'error' => true];
         try {
 
             if (!$question = $this->questions->find($data['question_id'])) {
@@ -66,16 +67,22 @@ class AnswerController extends Controller
 
                 $answer = new Answer;
                 $answer->setUser($this['user']);
-                $this->answers->save($question, ['comment_count' => $question->commentCountPlus()]);
+                $questionData['comment_count'] = $question->commentCountPlus();
 
             }
+
+            if($question->getStatus() == Question::STATUS_OPEN)
+                $questionData['status'] = Question::STATUS_ANSWERED;
 
             $date = (isset($data['date'])) ? $data['date'] : time();
             $data['modified'] = $this['dates']->getDateTime($date)->setTimezone(new \DateTimeZone('UTC'));
 
             $data['date'] = $id ? $question->getDate() : $data['modified'];
 
-            $this->answers->save($answer, $data);        
+            $this->answers->save($answer, $data); 
+
+            if($questionData)
+                $this->questions->save($question, $questionData);       
 
             return ['message' => $id ? __('Answer saved.') : __('Answer created.'), 'id' => $answer->getId()];
 

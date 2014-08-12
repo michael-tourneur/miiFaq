@@ -35,12 +35,13 @@ return [
                 $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
                 $table->addColumn('question_id', 'integer', ['unsigned' => true, 'length' => 10]);
                 $table->addColumn('user_id', 'string', ['length' => 255, 'default' => 0]);
+                $table->addColumn('content', 'text');
                 $table->addColumn('vote_plus', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
-                $table->addColumn('vote_best', 'smallint', ['default' => 0]);
                 $table->addColumn('vote_minus', 'string', ['unsigned' => true, 'length' => 10, 'default' => 0]);
+                $table->addColumn('vote', 'integer', ['length' => 10, 'default' => 0]);
+                $table->addColumn('vote_best', 'smallint', ['default' => 0]);
                 $table->addColumn('date', 'datetime', ['notnull' => false]);
                 $table->addColumn('modified', 'datetime');
-                $table->addColumn('content', 'text');
                 $table->addColumn('status', 'smallint');
                 $table->setPrimaryKey(['id']);
                 $table->addIndex(['status'], 'STATUS');
@@ -48,6 +49,7 @@ return [
                 $table->addIndex(['vote_plus'], 'VOTE_PLUS');
                 $table->addIndex(['vote_best'], 'VOTE_BEST');
                 $table->addIndex(['vote_minus'], 'VOTE_MINUS');
+                $table->addIndex(['vote'], 'VOTE');
             });
         }
     }

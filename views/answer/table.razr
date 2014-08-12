@@ -1,5 +1,23 @@
+<br>
+<div uk-clearfix">
+	<div class="uk-float-right">
+		<div class="uk-button-group ">
+	    <a 	class="uk-button uk-button-mini @( (!$filter['orderby'] || ($filter['orderby'] == 'date' && $filter['order'] == 'desc')) ? 'uk-button-danger' : '')" 
+	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'desc'] )">@trans('Active')</a>
+	    <a 	class="uk-button uk-button-mini @( $filter['orderby'] == 'date' && $filter['order'] == 'asc' ? 'uk-button-danger' : '')" 
+	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'asc'] )">@trans('Oldest')</a>
+	    <a 	class="uk-button uk-button-mini @( ($filter['orderby'] == 'vote') ? 'uk-button-danger' : '')" 
+	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'vote'] )">@trans('Votes')</a>
+		</div>
+	</div>
+</div>
+
 <h3>@(count($answers)) @trans('Answers')</h3>
 
 @foreach($answers as $answer) 
 	@include('extension://miiFaq/views/answer/view.razr', compact($answer))
 @endforeach
+
+@if(!count($answers))
+	 @trans('Be the first to answer this question!')
+@endif

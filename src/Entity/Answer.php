@@ -53,10 +53,13 @@ class Answer
     protected $vote_plus = 0;
 
     /** @Column(type="integer") */
-    protected $vote_best = 1;
+    protected $vote = 0;
 
     /** @Column(type="integer") */
     protected $vote_minus = 0;
+
+    /** @Column(type="integer") */
+    protected $vote_best = 0;
 
     /** @Column(type="datetime") */
     protected $date;
@@ -111,7 +114,7 @@ class Answer
 
     public function setVotePlus()
     {
-        $this->vote_plus += 1;
+        $this->vote_plus++;
     }
 
     public function getVoteMinus()
@@ -121,7 +124,21 @@ class Answer
 
     public function setVoteMinus()
     {
-        $this->vote_moins -= 1;
+        $this->vote_moins--;
+    }
+
+    public function getVote()
+    {
+        return $this->vote;
+    }
+
+    public function setVote() {
+        $this->vote = $this->vote_plus - $this->vote_minus;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
     }
 
     public function getModified()

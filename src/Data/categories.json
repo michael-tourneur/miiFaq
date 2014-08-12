@@ -1,10 +1,10 @@
 [{
-     'id': 'video',
+     'slug': 'video',
      'name': 'Video'
 },{
-     'id': 'image',
+     'slug': 'image',
      'name': 'Image'
 },{
-     'id': 'music',
+     'slug': 'music',
      'name': 'Music'
 }]

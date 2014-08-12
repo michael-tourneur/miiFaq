@@ -31,25 +31,26 @@ return [
 
         'miiFaq' => [
             'label'  => 'miiFaq',
-            'icon'   => 'extension://blog/extension.svg',
+            // 'icon'   => 'extension://blog/extension.svg',
             'url'    => '@miiFaq/admin/question',
             'active' => '@miiFaq/admin/question*',
-            'access' => 'miiFaq: manage questions || miiFaq: manage answers'
+            'access' => 'miiFaq: manage questions || miiFaq: manage answers',
+            'priority' => 0
         ],
-        // 'miiFaq: question list' => [
-        //     'label'  => 'Faq',
-        //     'parent' => 'miiFaq',
-        //     'url'    => '@miiFaq/admin/question',
-        //     'active' => '@miiFaq/admin/question*',
-        //     'access' => 'miiFaq: manage questions'
-        // ],
-        // 'miiFaq: answer list' => [
-        //     'label'  => 'Answers',
-        //     'parent' => 'miiFaq',
-        //     'url'    => '@miiFaq/admin/answer',
-        //     'active' => '@miiFaq/admin/answer*',
-        //     'access' => 'miiFaq: manage answers'
-        // ],
+        'miiFaq: question list' => [
+            'label'  => 'Questions',
+            'parent' => 'miiFaq',
+            'url'    => '@miiFaq/admin/question',
+            'active' => '@miiFaq/admin/question*',
+            'access' => 'miiFaq: manage questions'
+        ],
+        'miiFaq: answer list' => [
+            'label'  => 'Answers',
+            'parent' => 'miiFaq',
+            'url'    => '@miiFaq/admin/answer',
+            'active' => '@miiFaq/admin/answer*',
+            'access' => 'miiFaq: manage answers'
+        ],
 
     ],
 

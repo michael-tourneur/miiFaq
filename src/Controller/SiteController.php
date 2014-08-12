@@ -12,7 +12,7 @@ use Pagekit\User\Entity\UserRepository;
 
 
 /**
- * @Route("/faq")
+ * @Route("miiFaq", name="@miiFaq/site")
  */
 class SiteController extends Controller
 {
@@ -42,7 +42,6 @@ class SiteController extends Controller
     }
 
 	/**
-     * @Route("/", name="@miiFaq/site")
      * @Request({"filter": "array", "page":"int"})
      * @Response("extension://miiFaq/views/index.razr")
      */
@@ -74,7 +73,7 @@ class SiteController extends Controller
 
         $limit = 20; //$this->extension->getConfig('index.question_per_page', 20);
         $count = $query->count();
-        
+            
         if ($this['request']->isXmlHttpRequest()) {
             $list = [];
             foreach ($query->get() as $key => $question) {
@@ -93,7 +92,6 @@ class SiteController extends Controller
         return [
             'head.title' => __('FAQ'),
             'questions' => $query->get(),
-            'questionEntity' => new Question,
             'filter' => $filter,
         ];
     }
@@ -130,9 +128,10 @@ class SiteController extends Controller
 
     /**
      * @Route("/question/{id}", name="@miiFaq/site/question/id")
+     * @Request({"id": "int", "filter": "array"})
      * @Response("extension://miiFaq/views/question/view.razr")
      */
-    public function showQuestionAction($id)
+    public function showQuestionAction($id, $filter = null)
     {
         if (!$question = $this->questions->where(['id = ?', 'date < ?'], [$id, new \DateTime])->first()) {
             return $this['response']->create(__('Post not found!'), 404);
@@ -146,7 +145,23 @@ class SiteController extends Controller
             $this['session']->set('miiFaq.questions.viewed', $viewed);
         }
 
-        $query = $this->answers->query()->where(['status = ?'], [Answer::STATUS_APPROVED]);
+        if ($filter) {
+            $this['session']->set('miiFaq.question.answers.filter', $filter);
+        } else {
+            $filter = $this['session']->get('miiFaq.question.answers.filter', []);
+        }
+
+        $query = $this->answers->query();
+
+        if (!isset($filter['order'] ) || ( isset($filter['order'] ) && !in_array($filter['order'], ['asc', 'desc']))) {
+            $filter['order'] = 'desc';
+        }
+
+        if (isset($filter['orderby']) && in_array($filter['orderby'], ['vote', 'date'])) {
+            $query->orderBy($filter['orderby'], $filter['order']);
+        }
+
+        $query->where(['status = ?'], [Answer::STATUS_APPROVED]);
 
         $this['db.em']->related($question, 'comments', $query);
 
@@ -154,6 +169,7 @@ class SiteController extends Controller
             'head.title' => __($question->getTitle()), 
             'question' => $question,
             'answers' => $question->getComments(),
+            'filter' => $filter,
         ];
     }
 

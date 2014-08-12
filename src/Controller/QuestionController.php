@@ -9,12 +9,12 @@ use Pagekit\Framework\Controller\Exception;
 use Pagekit\User\Entity\UserRepository;
 
 /**
- * @Route("/admin/miifaq", name="@miiFaq/")
+ * @Route(name="@miiFaq/admin/question")
  * @Access("miiFaq: manage content", admin=true)
  */
 class QuestionController extends Controller
 {
-		const POSTS_PER_PAGE = 20;
+	const POSTS_PER_PAGE = 20;
 
     /**
      * @var Repository
@@ -39,6 +39,39 @@ class QuestionController extends Controller
         $this->questions 	= $this['db.em']->getRepository('Mii\Faq\Entity\Question');
         $this->roles        = $this['users']->getRoleRepository();
         $this->users 		= $this['users']->getUserRepository();
+    }
+
+    /**
+     * @Request({"filter": "array", "page":"int"})
+     * @Response("extension://miiFaq/views/admin/question/index.razr")
+     */
+    public function indexAction($filter = null, $page = 0)
+    {
+        $query = $this->questions->query();
+
+
+        $limit = 10; //$this->extension->getConfig('posts.posts_per_page');
+        $count = $query->count();
+        $total = ceil($count / $limit);
+        $page  = max(0, min($total - 1, $page));
+        $questions = $query->offset($page * $limit)->limit($limit)->related('user')->orderBy('date', 'DESC')->get();
+
+        if ($this['request']->isXmlHttpRequest()) {
+            return $this['response']->json([
+                'table' => $this['view']->render('extension://miiFaq/views/admin/question/table.razr', ['count' => $count, 'questions' => $questions]),
+                'total' => $total
+            ]);
+        }
+
+        return [
+            'head.title' => __('Questions'), 
+            'questions' => $questions, 
+            'statuses' => Question::getStatuses(), 
+            'filter' => $filter, 
+            'total' => $total, 
+            'count' => $count, 
+            'pending' => $pending
+        ];
     }
 
     /**
@@ -94,6 +127,35 @@ class QuestionController extends Controller
 
         }
     }
+
+    /**
+     * @Request({"id": "int"})
+     * @Response("extension://miiFaq/views/admin/question/edit.razr")
+     */
+    public function editAction($id)
+    {
+        try {
+
+            if (!$question = $this->questions->query()->where(compact('id'))->related('user')->first()) {
+                throw new Exception(__('Invalid post id.'));
+            }
+
+        } catch (Exception $e) {
+
+            $this['message']->error($e->getMessage());
+
+            return $this->redirect('@miiFaq/admin/question');
+        }
+
+        return [
+            'head.title' => __('Edit Question'), 
+            'question' => $question, 
+            'statuses' => Question::getStatuses(), 
+            'roles' => $this->roles->findAll(), 
+            'users' => $this->users->findAll()
+        ];
+    }
+
 
 
 
