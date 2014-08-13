@@ -93,6 +93,7 @@ class SiteController extends Controller
             'head.title' => __('FAQ'),
             'questions' => $query->get(),
             'filter' => $filter,
+            'question' => new Question
         ];
     }
 

@@ -9,7 +9,7 @@ use Pagekit\User\Entity\AccessTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
 
 /**
- * @Entity(tableClass="@faq_answers")
+ * @Entity(tableClass="@miifaq_answers")
  */
 class Answer
 {

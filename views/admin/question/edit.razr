@@ -1,4 +1,6 @@
-<form id="js-posts" class="uk-form" action="@url('@miiFaq/admin/question')" method="post">
+@script('miiFaq.admin-question-edit', 'extension://miiFaq/assets/js/admin/question/edit.js', 'requirejs')
+
+<form id="js-questions" class="uk-form" action="@url('@miiFaq/admin/question/save')" method="post">
 
     @section('toolbar', 'show')
         <div class="uk-float-left">

@@ -9,7 +9,7 @@ use Pagekit\Comment\CommentsTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
 
 /**
- * @Entity(tableClass="@faq_questions")
+ * @Entity(tableClass="@miifaq_questions")
  */
 class Question
 {
@@ -208,5 +208,13 @@ class Question
         while ($repository->query()->where('slug = ?', [$this->slug])->where(function($query) use($id) { if ($id) $query->where('id <> ?', [$id]); })->first()) {
             $this->slug = preg_replace('/-\d+$/', '', $this->slug).'-'.$i++;
         }
+    }
+
+    /**
+     * @PreDelete
+     */
+    public function preDelete(EntityEvent $event)
+    {
+        $event->getConnection()->delete('@miifaq_answers', ['question_id' => $this->getId()]);
     }
 }

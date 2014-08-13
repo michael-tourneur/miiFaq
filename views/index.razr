@@ -1,4 +1,4 @@
-@script('miiFaq.questions-index', 'extension://miiFaq/assets/js/questions/index.js', ['requirejs'])
+@script('miiFaq.question-index', 'extension://miiFaq/assets/js/question/index.js', ['requirejs'])
 @style('miiFaq.style', 'extension://miiFaq/assets/css/style.css')
 
 <section id="miiFaq-index" class="">
@@ -24,21 +24,20 @@
 					    			unset($query['filter']['status'])
 					    		@endif
 								  <a class="@( $current ? 'uk-active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'All' )</a>
-
 					    		@set( $current = (array_key_exists('status', $filter) && $filter['status'] == constant('STATUS_OPEN', $question)) )
-					    		@set( $query['filter']['status'] = constant('STATUS_OPEN', $question) )
+					    		@set( $query = $query + ['filter' => ['status' => constant('STATUS_OPEN', $question)]] )
 					    		<a class="@( $current ? 'uk-active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Open' )</a> 
 
 					    		@set( $current = (array_key_exists('status', $filter) && $filter['status'] == constant('STATUS_ANSWERED', $question)) )
-					    		@set( $query['filter']['status'] = constant('STATUS_ANSWERED', $question) )
+					    		@set( $query = $query + ['filter' => ['status' => constant('STATUS_ANSWERED', $question)]] )
 					    		<a class="@( $current ? 'uk-active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Answered' )</a> 
 
 					    		@set( $current = (array_key_exists('status', $filter) && $filter['status'] == constant('STATUS_RESOLVED', $question)) )
-					    		@set( $query['filter']['status'] = constant('STATUS_RESOLVED', $question) )
+					    		@set( $query = $query + ['filter' => ['status' => constant('STATUS_RESOLVED', $question)]] )
 					    		<a class="@( $current ? 'uk-active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Resolved' )</a>  
 
 					    		@set( $current = (array_key_exists('status', $filter) && $filter['status'] == constant('STATUS_CLOSED', $question)) )
-					    		@set( $query['filter']['status'] = constant('STATUS_CLOSED', $question) )
+					    		@set( $query = $query + ['filter' => ['status' => constant('STATUS_CLOSED', $question)]] )
 					    		<a class="@( $current ? 'uk-active' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'Closed' )</a> 		    				
 					    </div>
 			  </div>

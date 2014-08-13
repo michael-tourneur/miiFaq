@@ -6,8 +6,8 @@ return [
 
         $util = $app['db']->getUtility();
 
-        if ($util->tableExists('@faq_questions') === false) {
-            $util->createTable('@faq_questions', function($table) {
+        if ($util->tableExists('@miifaq_questions') === false) {
+            $util->createTable('@miifaq_questions', function($table) {
                 $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
                 $table->addColumn('user_id', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
                 $table->addColumn('slug', 'string', ['length' => 255]);
@@ -30,8 +30,8 @@ return [
             });
         }
 
-        if ($util->tableExists('@faq_answers') === false) {
-            $util->createTable('@faq_answers', function($table) {
+        if ($util->tableExists('@miifaq_answers') === false) {
+            $util->createTable('@miifaq_answers', function($table) {
                 $table->addColumn('id', 'integer', ['unsigned' => true, 'length' => 10, 'autoincrement' => true]);
                 $table->addColumn('question_id', 'integer', ['unsigned' => true, 'length' => 10]);
                 $table->addColumn('user_id', 'string', ['length' => 255, 'default' => 0]);

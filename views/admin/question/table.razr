@@ -22,25 +22,13 @@
             </td>
             <td class="uk-text-center">
                 @if ($question.status == constant('STATUS_OPEN', $question))
-                <a href="#" data-action="@url('@miiFaq/admin/question/status', ['ids[]' => $question.id, 'status' => constant('STATUS_OPEN', $question)])" title="@($question.statusText)">
                     <i class="uk-icon-circle uk-text-muted"></i>
-                </a>
                 @elseif ($question.status == constant('STATUS_ANSWERED', $question))
-                <a href="#" data-action="@url('@miiFaq/admin/question/status', ['ids[]' => $question.id, 'status' => constant('STATUS_ANSWERED', $question)])" title="@($question.statusText)">
                     <i class="uk-icon-circle uk-text-warning"></i>
-                </a>
                 @elseif ($question.status == constant('STATUS_RESOLVED', $question))
-                <a href="#" data-action="@url('@miiFaq/admin/question/status', ['ids[]' => $question.id, 'status' => constant('STATUS_RESOLVED', $question)])" title="@($question.statusText)">
-                    @if($question.date > new \DateTime)
-                    <i class="uk-icon-clock-o uk-text-success"></i>
-                    @else
                     <i class="uk-icon-circle uk-text-success"></i>
-                    @endif
-                </a>
                 @elseif ($question.status == constant('STATUS_CLOSED', $question))
-                <a href="#" data-action="@url('@miiFaq/admin/question/status', ['ids[]' => $question.id, 'status' => constant('STATUS_CLOSED', $question)])" title="@($question.statusText)">
                     <i class="uk-icon-circle uk-text-danger"></i>
-                </a>
                 @endif
             </td>
             <td>

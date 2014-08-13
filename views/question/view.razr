@@ -1,3 +1,5 @@
+@script('miiFaq.question-view', 'extension://miiFaq/assets/js/question/view.js', ['requirejs'])
+
 <article class="uk-article">
 	<header>
 		<h1 class="uk-article-title">@($question.title)</h1>
