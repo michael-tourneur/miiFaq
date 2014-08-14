@@ -134,8 +134,9 @@ class SiteController extends Controller
      */
     public function showQuestionAction($id, $filter = null)
     {
+
         if (!$question = $this->questions->where(['id = ?', 'date < ?'], [$id, new \DateTime])->first()) {
-            return $this['response']->create(__('Post not found!'), 404);
+            return $this['response']->create(__('Question not found!'), 404);
         }
 
         $viewed = $this['session']->get('miiFaq.questions.viewed', []);
@@ -165,6 +166,12 @@ class SiteController extends Controller
         $query->where(['status = ?'], [Answer::STATUS_APPROVED]);
 
         $this['db.em']->related($question, 'comments', $query);
+
+        if($this['request']->isXmlHttpRequest())
+            return $this['response']->json([
+                'table' => $this['view']->render('extension://miiFaq/views/answer/table.razr', ['answers' => $question->getComments()]), 
+                'count' => $count, 
+            ]);
 
         return [
             'head.title' => __($question->getTitle()), 

@@ -1,9 +1,11 @@
 require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
 
-	var formAnswer = $('#js-answer'), 
+	var formAnswer = $('#js-answer'), filters = $('#js-answers-filter'), answers = $('#js-answers-table'),
 	id = $('input[name="answer[question_id]"]', formAnswer), 
+	buttonFilterActive = $('.uk-button.active', filters),
 	message = $('textarea[name="answer[content]"]', formAnswer),
-	spinner = $('.js-spinner', formAnswer), 
+	spinnerAnswer = $('.js-spinner', formAnswer), 
+	spinnerFilters = $('.js-spinner', filters),
 	dirty = false;
 
 	// form ajax saving
@@ -12,7 +14,7 @@ require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      spinner.removeClass('uk-hidden');
+      spinnerAnswer.removeClass('uk-hidden');
 
       $.post(formAnswer.attr('action'), formAnswer.serialize(), function(response) {
 
@@ -20,13 +22,54 @@ require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
           uikit.notify(response.message, response.error ? 'danger' : 'success');
 
           if (response.id) {
-          	console.log('test');
               message.val('');
+              reloadAnswersTable(buttonFilterActive);
           }
 
-          spinner.addClass('uk-hidden');
+          spinnerAnswer.addClass('uk-hidden');
       });
   });
+
+  // table filters
+  filters.on('click', '.uk-button', function (e) {
+  		var button = $(this);
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      if(!button.is(buttonFilterActive)) {
+  			reloadAnswersTable(button);
+      }
+  });
+
+  // table reload
+  var reloadAnswersTable = function (button) {
+
+  		var index, url, param;
+
+			index = button.attr('href').indexOf('?');
+			url = button.attr('href').substring(0, index);
+			param = decodeURIComponent(button.attr('href').substring(index+1));
+
+      buttonFilterActive.removeClass('active');
+      button.addClass('active');
+
+      spinnerFilters.removeClass('uk-hidden');
+
+      $.get(url, param, function(response) {
+
+          dirty = false;
+
+          if (response.table) {
+              answers.html(response.table);
+              buttonFilterActive.removeClass('uk-button-danger');
+              button.addClass('uk-button-danger');
+              buttonFilterActive = button;
+          }
+
+          spinnerFilters.addClass('uk-hidden');
+      });
+  }
 
 
 });
