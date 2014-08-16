@@ -58,8 +58,8 @@ class Answer
     /** @Column(type="integer") */
     protected $vote_minus = 0;
 
-    /** @Column(type="integer") */
-    protected $vote_best = 0;
+    /** @Column(type="boolean") */
+    protected $vote_best = false;
 
     /** @Column(type="datetime") */
     protected $date;
@@ -112,19 +112,21 @@ class Answer
         return $this->vote_plus;
     }
 
-    public function setVotePlus()
+    public function setVotePlus($value = 1)
     {
-        $this->vote_plus++;
+        $this->vote_plus = $this->getVotePlus() + $value;
+        $this->setVote();
     }
 
     public function getVoteMinus()
     {
-        return $this->vote_moins;
+        return $this->vote_minus;
     }
 
-    public function setVoteMinus()
+    public function setVoteMinus($value = 1)
     {
-        $this->vote_moins--;
+        $this->vote_minus = $this->getVoteMinus() + $value;
+        $this->setVote();
     }
 
     public function getVote()
@@ -134,6 +136,15 @@ class Answer
 
     public function setVote() {
         $this->vote = $this->vote_plus - $this->vote_minus;
+    }
+
+    public function getVoteBest()
+    {
+        return $this->vote_best;
+    }
+
+    public function setVoteBest() {
+        $this->vote_best = true;
     }
 
     public function getDate()

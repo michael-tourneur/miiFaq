@@ -16,6 +16,7 @@ return [
                 $table->addColumn('content', 'text');
                 $table->addColumn('date', 'datetime', ['notnull' => false]);
                 $table->addColumn('modified', 'datetime');
+                $table->addColumn('best_answer', 'integer', ['unsigned' => true, 'length' => 10, 'default' => 0]);
                 $table->addColumn('comment_count', 'integer', ['default' => 0]);
                 $table->addColumn('view_count', 'integer', ['default' => 0]);
                 $table->addColumn('vote', 'integer', ['default' => 0]);

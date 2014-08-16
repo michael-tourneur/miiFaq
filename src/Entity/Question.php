@@ -71,6 +71,9 @@ class Question
     /** @Column(type="integer") */
     protected $vote = 0;
 
+     /** @Column(type="integer") */
+    protected $best_answer = 0;
+
     public function getId()
     {
         return $this->id;
@@ -191,6 +194,16 @@ class Question
     public function commentCountPlus()
     {
         return $this->comment_count += 1;
+    }
+
+    public function getBestAnswer()
+    {
+        return $this->best_answer;
+    }
+
+    public function setBestAnswer($answer)
+    {
+        $this->best_answer = (int) $answer;
     }
 
     /**

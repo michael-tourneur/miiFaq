@@ -12,21 +12,21 @@
 
 <br>
 <div uk-clearfix">
-	<div class="uk-float-right">
-		<div id="js-answers-filter" class="uk-button-group">
-			<i class="uk-icon-spinner uk-icon-spin js-spinner uk-margin-small-right uk-hidden"></i>
+	<div id="js-answers-filter" class="uk-float-right">
+		<i class="uk-icon-spinner uk-icon-spin js-spinner uk-margin-small-right uk-hidden"></i>
+		<div class="uk-button-group">
 	    <a 	class="uk-button uk-button-mini @( (!$filter['orderby'] || ($filter['orderby'] == 'date' && $filter['order'] == 'desc')) ? 'uk-button-danger active' : '')" 
-	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'desc'] )">@trans('Active')</a>
+	    		href="@url( '@miiFaq/site/question/id', ['id' => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'desc'] )">@trans('Active')</a>
 	    <a 	class="uk-button uk-button-mini @( $filter['orderby'] == 'date' && $filter['order'] == 'asc' ? 'uk-button-danger active' : '')" 
-	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'asc'] )">@trans('Oldest')</a>
+	    		href="@url( '@miiFaq/site/question/id', ['id' => $question.id, 'filter[orderby]' => 'date', 'filter[order]' => 'asc'] )">@trans('Oldest')</a>
 	    <a 	class="uk-button uk-button-mini @( ($filter['orderby'] == 'vote') ? 'uk-button-danger active' : '')" 
-	    		href="@url( '@miiFaq/site/question/id', [id => $question.id, 'filter[orderby]' => 'vote'] )">@trans('Votes')</a>
+	    		href="@url( '@miiFaq/site/question/id', ['id' => $question.id, 'filter[orderby]' => 'vote'] )">@trans('Votes')</a>
 
 		</div>
 	</div>
 </div>
 
 <div id="js-answers-table">
-	@include('extension://miiFaq/views/answer/table.razr', compact('answers'))
+	@include('extension://miiFaq/views/answer/table.razr', compact('answers', 'question'))
 </div>
 @include('extension://miiFaq/views/answer/edit.razr')

@@ -54,19 +54,19 @@ class AnswerController extends Controller
      */
     public function saveAction($id, $data)
     {
-        if(!$data['content']) return ['message' => __('answer message is required.'), 'error' => true];
+        if(!$data['content']) return ['message' => __('Answer\'s message is required.'), 'error' => true];
         try {
 
             if (!$question = $this->questions->find($data['question_id'])) {
 
-                return ['message' => __('No question associated.'), 'error' => true];
+                return ['message' => __('Question associated not found.'), 'error' => true];
 
             }
 
             if (!$answer = $this->answers->find($id)) {
 
                 $answer = new Answer;
-                $answer->setUser($this['user']);
+                $answer->setUserId((int) $this['user']->getId());
                 $questionData['comment_count'] = $question->commentCountPlus();
 
             }
@@ -93,4 +93,63 @@ class AnswerController extends Controller
         }
     }
 
+
+     /**
+     * @Request({"id": "int", "vote": "boolean"})
+     * @Response("json")
+     */
+    public function voteAnswerAction($id, $vote) 
+    {
+        try {
+
+            if (!$answer = $this->answers->find($id)) {
+                return ['message' => __('Answer not found.'), 'error' => true];
+            }
+
+            if($vote)
+                $answer->setVotePlus();
+            else
+                $answer->setVoteMinus();
+
+            $this->answers->save($answer); 
+
+            return ['message' => __('Vote added.'), 'vote' => $answer->getVote(), 'error' => false];
+
+        } catch (Exception $e) {
+
+            return ['message' => $e->getMessage(), 'error' => true];
+
+        }
+    }
+
+    /**
+     * @Request({"id": "int"})
+     * @Response("json")
+     */
+    public function bestAnswerAction($id)
+    {
+        try {
+
+            if (!$answer = $this->answers->find($id)) {
+                return ['message' => __('Answer not found.'), 'error' => true];
+            }
+
+            if (!$question = $this->questions->find($answer->getQuestionId())) {
+                return ['message' => __('Question associated not found.'), 'error' => true];
+            }
+
+            $answer->setVoteBest();
+            $this->answers->save($answer); 
+
+            $question->setBestAnswer($id);
+            $this->questions->save($question); 
+
+            return ['message' => __('Vote added.'), 'vote' => $answer->getVote(), 'error' => false];
+
+        } catch (Exception $e) {
+
+            return ['message' => $e->getMessage(), 'error' => true];
+
+        }
+    }
 }

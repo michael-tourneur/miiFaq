@@ -2,7 +2,7 @@
 
 
 @foreach($answers as $answer) 
-	@include('extension://miiFaq/views/answer/view.razr', compact($answer))
+	@include('extension://miiFaq/views/answer/view.razr', compact('answer', 'question'))
 @endforeach
 
 @if(!count($answers))

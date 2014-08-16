@@ -1,4 +1,4 @@
-require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
+require(['jquery', 'uikit!notify', 'gravatar', 'domReady!'], function($, uikit, gravatar) {
 
 	var formAnswer = $('#js-answer'), filters = $('#js-answers-filter'), answers = $('#js-answers-table'),
 	id = $('input[name="answer[question_id]"]', formAnswer), 
@@ -6,7 +6,48 @@ require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
 	message = $('textarea[name="answer[content]"]', formAnswer),
 	spinnerAnswer = $('.js-spinner', formAnswer), 
 	spinnerFilters = $('.js-spinner', filters),
+  answer = $('.miifaq-answer'),
+  avatar = $('.js-avatar', answer),
+  reloadAnswersTable,
+  reloadGravatar,
 	dirty = false;
+
+  // table reload
+  reloadAnswersTable = function (button) {
+
+      var index, url, param;
+
+      index = button.attr('href').indexOf('?');
+      url = button.attr('href').substring(0, index);
+      param = decodeURIComponent(button.attr('href').substring(index+1));
+
+      buttonFilterActive.removeClass('active');
+      button.addClass('active');
+
+      spinnerFilters.removeClass('uk-hidden');
+
+      $.get(url, param, function(response) {
+
+          dirty = false;
+
+          if (response.table) {
+              answers.html(response.table);
+              buttonFilterActive.removeClass('uk-button-danger');
+              button.addClass('uk-button-danger');
+              buttonFilterActive = button;
+          }
+
+          spinnerFilters.addClass('uk-hidden');
+
+          reloadGravatar();
+      });
+  }
+
+  reloadGravatar = function () {
+    $.each(avatar, function() {
+      $(this).html('<img src="' + gravatar.url($(this).data('email'), {s: 25, d: 'mm', r: 'g'}) + '" class="uk-border-circle" height="25" width="25">');
+    });
+  }
 
 	// form ajax saving
   formAnswer.on('submit', function(e) {
@@ -42,34 +83,33 @@ require(['jquery', 'uikit!notify', 'domReady!'], function($, uikit) {
       }
   });
 
-  // table reload
-  var reloadAnswersTable = function (button) {
+  answer.on('click', '.js-answer-vote', function (e) {
+    var button, index, url, param;
 
-  		var index, url, param;
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-			index = button.attr('href').indexOf('?');
-			url = button.attr('href').substring(0, index);
-			param = decodeURIComponent(button.attr('href').substring(index+1));
+    button = $(this);
+    index = button.attr('href').indexOf('?');
+    url = button.attr('href').substring(0, index);
+    param = decodeURIComponent(button.attr('href').substring(index+1));
 
-      buttonFilterActive.removeClass('active');
-      button.addClass('active');
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-      spinnerFilters.removeClass('uk-hidden');
+    $.get(url, param, function(response) {
 
-      $.get(url, param, function(response) {
+      dirty = false;
+      uikit.notify(response.message, response.error ? 'danger' : 'success');
 
-          dirty = false;
+      if(response.vote) {
+        button.parents('.miifaq-answer').find('.vote').html(response.vote);
+      }
 
-          if (response.table) {
-              answers.html(response.table);
-              buttonFilterActive.removeClass('uk-button-danger');
-              button.addClass('uk-button-danger');
-              buttonFilterActive = button;
-          }
+    });
+  });
 
-          spinnerFilters.addClass('uk-hidden');
-      });
-  }
+  reloadGravatar();
 
 
 });

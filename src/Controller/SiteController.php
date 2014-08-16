@@ -102,9 +102,9 @@ class SiteController extends Controller
      * @Response("extension://miiFaq/views/question/edit.razr")
      */
     public function addQuestionAction()
-    {
+    {        
         $question = new Question;
-        $question->setUser($this['user']);
+        $question->setUserId((int) $this['user']->getId());
         return [
             'head.title' => __('Add Question'), 
             'question' => $question, 
@@ -170,7 +170,7 @@ class SiteController extends Controller
         if($this['request']->isXmlHttpRequest())
             return $this['response']->json([
                 'table' => $this['view']->render('extension://miiFaq/views/answer/table.razr', ['answers' => $question->getComments()]), 
-                'count' => $count, 
+                'count' => count($question->getComments()), 
             ]);
 
         return [
@@ -194,6 +194,48 @@ class SiteController extends Controller
             return $response;
 
         return $this->redirect($this['url']->route('@miiFaq/site/question/id', ['id' => $data['question_id']]));
+    }
+
+    /**
+     * @Route("/question/{question}/answer/{id}/vote", name="@miiFaq/site/answer/id/vote")
+     * @Request({"id": "int", "question": "int", "vote": "boolean"})
+     * @Response("json")
+     */
+    public function voteAnswerAction($id, $question, $vote)
+    {
+
+        $voted = $this['session']->get('miiFaq.question.answers.voted', []);
+        if(isset($voted[$id]) && $voted[$id] == $vote)
+            $response = ['message' => __('Already voted.'), 'error' => true];
+        else {
+            $answerController = new AnswerController();
+            $response = $answerController->voteAnswerAction($id, $vote);
+        }
+        $voted[$id] = $vote;
+        $this['session']->set('miiFaq.question.answers.voted', $voted);
+
+        if($this['request']->isXmlHttpRequest())
+            return $response;
+
+        return $this->redirect($this['url']->route('@miiFaq/site/question/id', ['id' => $question]));
+    }
+
+
+    /**
+     * @Route("/question/{question}/answer/{id}/best", name="@miiFaq/site/answer/id/best")
+     * @Request({"id": "int", "question": "int"})
+     * @Response("json")
+     */
+    public function bestAnswerAction($id, $question)
+    {   
+
+        $answerController = new AnswerController();
+        $response = $answerController->bestAnswerAction($id);
+
+        if($this['request']->isXmlHttpRequest())
+            return $response;
+
+        return $this->redirect($this['url']->route('@miiFaq/site/question/id', ['id' => $question]));
     }
 
 }

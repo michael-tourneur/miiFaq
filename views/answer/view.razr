@@ -1,19 +1,32 @@
-<div class="uk-panel uk-panel-box">
-	@if($answer.vote_best)
-	<i class="uk-icon-check"></i></a>
-	@endif
+<div class="miifaq-answer uk-panel uk-panel-box uk-clearfix">
 
 	<div class="uk-clearfix">
 			<div class="uk-float-left uk-text-large">
-		  		<a href=""><i class="uk-icon-chevron-up"></i></a> @($answer.vote) <a href=""><i class="uk-icon-chevron-down"></i></a>
+		  		<a class="js-answer-vote" href="@url('@miiFaq/site/answer/id/vote', ['id' => $answer.id, 'question' => $answer.questionId, 'vote' => true])"><i class="uk-icon-chevron-up"></i></a> 
+		  		<span class="vote"> @($answer.vote) </span>
+		  		<a class="js-answer-vote" href="@url('@miiFaq/site/answer/id/vote', ['id' => $answer.id, 'question' => $answer.questionId, 'vote' => false])"><i class="uk-icon-chevron-down"></i></a>
 		  </div>
-			<div class="uk-float-right uk-text-small">
-		  		@trans( 'Answered' ) @date($answer.getDate())
+
+		  <div class="uk-float-right uk-text-large">
+			@if($question.userId == @(int)$app['user']->getId() && !$answer.voteBest)
+  				<a href="@url('@miiFaq/site/answer/id/best', ['id' => $answer.id, 'question' => $question.id])"><i class="uk-icon-circle-thin"></i></a>
+  		@elseif($answer.voteBest)
+  					<i class="uk-icon-check-circle"></i>
+		  @endif
 		  </div>
   </div>
 
   <hr class="uk-article-divider">
-	<div>
-			@($answer.content)
+
+	<div class="uk-float-left">
+		@($answer.content) 
 	</div>
+	<div class="uk-float-right uk-text-small">
+			<div class="uk-clearfix">@trans( 'Answered' ) @date($answer.getDate())</div>
+			<div class="js-avatar uk-float-left" data-email="@($app['user']->getEmail())"></div>
+			<div class="uk-float-right">
+				@($app['user']->getName())
+			</div>
+	</div>
+
 </div>

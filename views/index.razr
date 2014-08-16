@@ -47,7 +47,7 @@
 				    		<div class="uk-button-group">
 					    			<?php 
 					    				$query = ['filter' => $filter];
-					    				$current = (array_key_exists('orderby', $filter) && $filter['orderby'] == 'view_count');
+					    				$current = (!array_key_exists('orderby', $filter) || (array_key_exists('orderby', $filter) && $filter['orderby'] == 'view_count'));
 					    				$query['filter']['orderby'] = 'view_count';
 					    			?>
 								    <a class="uk-button uk-button-mini@( $current ? ' uk-button-danger' : '')" href="@url( '@miiFaq/site', $query )">@trans( 'View' )</a>
